@@ -10,8 +10,8 @@ nnCostFunction = function (nnParams, inputLayerSize, hiddenLayerSize,
 # Setup some useful variables
   m = nrow(X)
   J = 0
-  theta1Grad = matrix(0, nrow(theta1), ncol(theta1))
-  theta2Grad = matrix(0, nrow(theta2), ncol(theta2))
+#   theta1Grad = matrix(0, nrow(theta1), ncol(theta1))
+#   theta2Grad = matrix(0, nrow(theta2), ncol(theta2))
   a1 = cbind(rep(1, m), X)
   z2 = a1 %*% t(theta1)
   a2 = sigmoid(z2)
@@ -28,18 +28,18 @@ nnCostFunction = function (nnParams, inputLayerSize, hiddenLayerSize,
       sum(theta1[,2:ncol(theta1)]^2)*lambda/2/m +
       sum(theta2[,2:ncol(theta2)]^2)*lambda/2/m
 
-  d3 = a3 - yMat
-  d3Theta2 = d3 %*% theta2
-  d2 = d3Theta2[,2:ncol(d3Theta2)] * sigmoidGradient(z2)
-
-  theta1Grad = t(d2) %*% a1/m
-  theta2Grad = t(d3) %*% a2/m
-
-  theta1Grad[,2:ncol(theta1Grad)] = theta1Grad[,2:ncol(theta1Grad)] + 
-                                   lambda/m*theta1[,2:ncol(theta1)]
-  theta2Grad[,2:ncol(theta2Grad)] = theta2Grad[,2:ncol(theta2Grad)] + 
-                                   lambda/m*theta2[,2:ncol(theta2)]
-  grad = c(as.vector(theta1Grad), as.vector(theta2Grad))
-  attr(J, "gradient") = grad # gradient attribute for minimisation
+#   d3 = a3 - yMat
+#   d3Theta2 = d3 %*% theta2
+#   d2 = d3Theta2[,2:ncol(d3Theta2)] * sigmoidGradient(z2)
+# 
+#   theta1Grad = t(d2) %*% a1/m
+#   theta2Grad = t(d3) %*% a2/m
+# 
+#   theta1Grad[,2:ncol(theta1Grad)] = theta1Grad[,2:ncol(theta1Grad)] + 
+#                                    lambda/m*theta1[,2:ncol(theta1)]
+#   theta2Grad[,2:ncol(theta2Grad)] = theta2Grad[,2:ncol(theta2Grad)] + 
+#                                    lambda/m*theta2[,2:ncol(theta2)]
+#   grad = c(as.vector(theta1Grad), as.vector(theta2Grad))
+#   attr(J, "gradient") = grad # gradient attribute for minimisation
   return(J)
 }

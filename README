@@ -9,3 +9,7 @@ No warranty of correctness!
 Programs are still under debugging and optimisation!
 
 Training dataset and test dataset can be download from kaggle.com.
+
+Looks like fmincg is faster and better than the minimization algorithms in R. For this reason I will use Andrew's matlab/octave codes.
+
+The comparation of the two methods can be found in compare folder.
