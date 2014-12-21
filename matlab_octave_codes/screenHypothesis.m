@@ -19,6 +19,7 @@ num_labels = 10;          % 10 labels, from 1 to 10
 fprintf('Loading Data ...\n')
 
 dat = csvread('train.csv');
+dat = dat(2:end,:);
 m = size(dat, 1);
 perm = randperm(m,1000);
 X = dat(perm(1:700), 2:end);
@@ -64,7 +65,7 @@ initial_nn_params = [initial_Theta1(:) ; initial_Theta2(:)];
 %  advanced optimizers are able to train our cost functions efficiently as
 %  long as we provide them with the gradient computations.
 %
-fprintf('\nTraining Neural Network... \n')
+fprintf('\nTraining Neural Network...%d \n', iter_screen)
 
 %  After you have completed the assignment, change the MaxIter to a larger
 %  value to see how more training helps.

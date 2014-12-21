@@ -6,7 +6,7 @@ clear ; close all; clc
 
 %% Setup the parameters you will use for this exercise
 input_layer_size  = 784;  % 28x28 Input Images of Digits
-hidden_layer_size = 400;   % hidden layer size from the result of screenHypothesis
+hidden_layer_size = 250;   % hidden layer size from the result of screenHypothesis
 num_labels = 10;          % 10 labels, from 1 to 10   
                           % (note that we have mapped "0" to label 10)
 
@@ -19,6 +19,7 @@ num_labels = 10;          % 10 labels, from 1 to 10
 fprintf('Loading Data ...\n')
 
 dat = csvread('train.csv');
+dat = dat(2:end,:);
 m = size(dat, 1);
 perm = randperm(m,5000);
 X = dat(perm(1:3700), 2:end);
@@ -27,7 +28,7 @@ y = dat(perm(1:3700),1) + 1; % adapted to 1-based array index
 X_cv = dat(perm(3701:5000), 2:end);
 y_cv = dat(perm(3701:5000),1) + 1; % adapted to 1-based array index
 
-lambdas = [0 0.0001 0.0003 0.0007 0.001 0.003 0.005];
+lambdas = [0.0001 0.0003 0.0007 0.001 0.003 0.007 0.01 0.03 0.07 0.1 0.3 0.7 1 3 7 10 30 70 100 300 700 1000];
 lambdas_length = length(lambdas);
 cost_train = zeros(lambdas_length, 1);
 cost_cv = zeros(lambdas_length, 1);
@@ -65,7 +66,7 @@ initial_nn_params = [initial_Theta1(:) ; initial_Theta2(:)];
 %  advanced optimizers are able to train our cost functions efficiently as
 %  long as we provide them with the gradient computations.
 %
-fprintf('\nTraining Neural Network... \n')
+fprintf('\nTraining Neural Network... %d\n', iter_lambda)
 
 %  After you have completed the assignment, change the MaxIter to a larger
 %  value to see how more training helps.
@@ -89,15 +90,18 @@ toc
 cost_cv(iter_lambda) = nnCostFunction(nn_params, ...
                                    input_layer_size, ...
                                    hidden_layer_size, ...
-                                   num_labels, X_cv, y_cv, lambda);
-cost_train(iter_lambda) = cost(end);
+                                   num_labels, X_cv, y_cv, 0);
+cost_train(iter_lambda) = nnCostFunction(nn_params, ...
+                                   input_layer_size, ...
+                                   hidden_layer_size, ...
+                                   num_labels, X, y, 0);
 end % end screening hidden_layer_size
 figure
 hold on
-plot(lambdas, cost_cv,'.-')
-plot(lambdas, cost_train, 'r.-')
+loglog(lambdas, cost_cv,'.-')
+loglog(lambdas, cost_train, 'r.-')
 hold off
-
+save cost_screen_regularization.m cost_cv cost_train
 % Obtain Theta1 and Theta2 back from nn_params
 %  Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
 %                   hidden_layer_size, (input_layer_size + 1));
