@@ -4,7 +4,6 @@
 
 %% Initialization
 clear ; close all; clc
-
 %% Setup the parameters you will use for this exercise
 input_layer_size  = 784;  % 28x28 Input Images of Digits
 hidden_layer_size = 250;   % 250 hidden units
@@ -15,14 +14,22 @@ num_labels = 10;          % 10 labels, from 1 to 10
 %  We start by first loading and visualizing the dataset. 
 %  You will be working with a dataset that contains handwritten digits.
 %
-
+calc_aim = 'continue'; % setout, continue, or wrapup
+iter_start = 21;
+iter_end = 30;
 % Load Training Data
 fprintf('Loading Data ...\n')
-
 dat = csvread('train.csv'); % be careful csvread read the head as all zeros
 dat = dat(2:end,:);
 no_train = size(dat, 1);
-perm = randperm(no_train);
+
+if strcmp(calc_aim, 'setout')
+  perm = randperm(no_train);
+  save perm.mat perm
+else
+  load('perm.mat');
+end
+
 X = dat(:, 2:end);
 y = dat(:,1) + 1; % adapted to 1-based array index
 
@@ -45,8 +52,13 @@ clear dat; %remove dat variable to save more memory
 
 mini_batch_inits = 1:10:no_train;
 mini_batchs_length = length(mini_batch_inits);
-cost_train = zeros(mini_batchs_length,1);
-cost_cv = zeros(mini_batchs_length,1);
+
+if strcmp('setout',calc_aim)
+  cost_train = zeros(mini_batchs_length,1);
+  cost_cv = zeros(mini_batchs_length,1);
+else
+  load('costs.mat');
+end
 
 %% ================ Part 2: Initializing Pameters ================
 %  In this part of the exercise, you will be starting to implment a two
@@ -55,12 +67,15 @@ cost_cv = zeros(mini_batchs_length,1);
 %  (randInitializeWeights.m)
 
 fprintf('\nInitializing Neural Network Parameters ...\n')
-
-initial_Theta1 = randInitializeWeights(input_layer_size, hidden_layer_size);
-initial_Theta2 = randInitializeWeights(hidden_layer_size, num_labels);
+if strcmp('setout', calc_aim)
+  initial_Theta1 = randInitializeWeights(input_layer_size, hidden_layer_size);
+  initial_Theta2 = randInitializeWeights(hidden_layer_size, num_labels);
 
 % Unroll parameters
-initial_nn_params = [initial_Theta1(:) ; initial_Theta2(:)];
+  initial_nn_params = [initial_Theta1(:) ; initial_Theta2(:)];
+else
+  load('initial_nn_params.mat');
+end
 lambda = 20;
 options = optimset('MaxIter', 200);
 
@@ -72,7 +87,7 @@ options = optimset('MaxIter', 200);
 %  long as we provide them with the gradient computations.
 %
 
-for iter_mini_batch = 1:mini_batchs_length
+for iter_mini_batch = iter_start:iter_end
   mini_batch_init = mini_batch_inits(iter_mini_batch);
   fprintf('\nTraining Neural Network... %dth mini-batch\n', iter_mini_batch)
 % Create "short hand" for the cost function to be minimized
@@ -101,7 +116,11 @@ cost_cv(iter_mini_batch) = nnCostFunction(nn_params, ...
                                    num_labels, X_cv,...
                                    y_cv, 0);
 end
-save costs.m cost_train cost_cv;
+save initial_nn_params.mat initial_nn_params;
+save costs.mat cost_train cost_cv;
+if ~strcmp('wrapup', calc_aim) % if for loop isn't over
+  stop
+end
 % Obtain Theta1 and Theta2 back from nn_params
 Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
                  hidden_layer_size, (input_layer_size + 1));
@@ -109,7 +128,7 @@ Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
 Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):end), ...
                  num_labels, (hidden_layer_size + 1));
 
-save thetas.m Theta1 Theta2;
+save thetas.mat Theta1 Theta2;
 
 %% ================= Part 4: Implement Predict =================
 %  After training the neural network, we would like to use it to predict
@@ -123,12 +142,19 @@ fprintf('\nTraining Set Accuracy: %f\n', mean(double(pred == y)) * 100);
 
 test_dat = csvread('test.csv'); % be careful csvread read the head as all zeros
 test_dat = test_dat(2:end,:);
+no_test = size(test_dat);
 
 pred = predict(Theta1, Theta2, test_dat) - 1;
+f_test_csv = fopen('test_pred.csv', 'w');
+fprintf(f_test_csv, '%s,', 'ImageId');
+fprintf(f_test_csv, '%s\n', 'Label');
+fclose(f_test_csv);
 if size(pred,1) == 1
-  save test_pred.dat pred' -ascii;
+  pred = [(1:no_test)' pred'];
+  dlmwrite('test_pred.csv', pred, '-append');
 else
-  save test_pred.dat pred -ascii;
+  pred = [(1:no_test)' pred];
+  dlmwrite('test_pred.csv', pred, '-append');
 end
 % only save a column
 
