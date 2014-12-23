@@ -15,8 +15,8 @@ num_labels = 10;          % 10 labels, from 1 to 10
 %  You will be working with a dataset that contains handwritten digits.
 %
 calc_aim = 'continue'; % setout, continue, or wrapup
-iter_start = 21;
-iter_end = 30;
+iter_start = 221;
+iter_end = 240; %max 4200
 % Load Training Data
 fprintf('Loading Data ...\n')
 dat = csvread('train.csv'); % be careful csvread read the head as all zeros
