@@ -30,8 +30,8 @@ y_cv = dat(perm(3701:5000),1) + 1; % adapted to 1-based array index
 
 lambdas = [0.0001 0.0003 0.0007 0.001 0.003 0.007 0.01 0.03 0.07 0.1 0.3 0.7 1 3 7 10 30 70 100 300 700 1000];
 lambdas_length = length(lambdas);
-cost_train = zeros(lambdas_length, 1);
-cost_cv = zeros(lambdas_length, 1);
+err_train = zeros(lambdas_length, 1);
+err_cv = zeros(lambdas_length, 1);
 % Randomly select 100 data points to display
 %  sel = randperm(size(X, 1));
 %  sel = sel(1:100);
@@ -87,21 +87,24 @@ costFunction = @(p) nnCostFunction(p, ...
 tic
 [nn_params, cost] = fmincg(costFunction, initial_nn_params, options);
 toc
-cost_cv(iter_lambda) = nnCostFunction(nn_params, ...
-                                   input_layer_size, ...
-                                   hidden_layer_size, ...
-                                   num_labels, X_cv, y_cv, 0);
-cost_train(iter_lambda) = nnCostFunction(nn_params, ...
-                                   input_layer_size, ...
-                                   hidden_layer_size, ...
-                                   num_labels, X, y, 0);
+Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
+                 hidden_layer_size, (input_layer_size + 1));
+%
+Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):end), ...
+                 num_labels, (hidden_layer_size + 1));
+
+                 
+pred = predict(Theta1, Theta2, X);
+err_train(iter_lambda) = mean(double(pred ~= y)) * 100;
+pred = predict(Theta1, Theta2, X_cv);
+err_cv(iter_lambda) = mean(double(pred ~= y_cv)) * 100;
 end % end screening hidden_layer_size
 figure
 hold on
-loglog(lambdas, cost_cv,'.-')
-loglog(lambdas, cost_train, 'r.-')
+loglog(lambdas, err_cv,'.-')
+loglog(lambdas, err_train, 'r.-')
 hold off
-save cost_screen_regularization.m cost_cv cost_train
+save error_screen_regularization.mat err_cv err_train
 % Obtain Theta1 and Theta2 back from nn_params
 %  Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
 %                   hidden_layer_size, (input_layer_size + 1));
