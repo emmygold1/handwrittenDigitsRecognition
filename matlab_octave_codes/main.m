@@ -9,14 +9,22 @@ input_layer_size  = 784;  % 28x28 Input Images of Digits
 hidden_layer_size = 250;   % 250 hidden units
 num_labels = 10;          % 10 labels, from 1 to 10   
                           % (note that we have mapped "0" to label 10)
-
+lambda = 20;
+options = optimset('MaxIter', 200);
 %% =========== Part 1: Loading and Visualizing Data =============
 %  We start by first loading and visualizing the dataset. 
 %  You will be working with a dataset that contains handwritten digits.
 %
-calc_aim = 'continue'; % setout, continue, or wrapup
-iter_start = 221;
-iter_end = 240; %max 4200
+iter_start = 1;
+iter_end = 5; %max 84
+
+if iter_start == 1
+  calc_aim = 'setout';
+elseif iter_end == 84
+  calc_aim = 'wrapup';
+else
+  calc_aim = 'continue';
+end
 % Load Training Data
 fprintf('Loading Data ...\n')
 dat = csvread('train.csv'); % be careful csvread read the head as all zeros
@@ -50,7 +58,8 @@ clear dat; %remove dat variable to save more memory
 
 % form mini-batch
 
-mini_batch_inits = 1:10:no_train;
+mini_batch_size = 500;
+mini_batch_inits = 1:mini_batch_size:no_train;
 mini_batchs_length = length(mini_batch_inits);
 
 if strcmp('setout',calc_aim)
@@ -76,8 +85,7 @@ if strcmp('setout', calc_aim)
 else
   load('initial_nn_params.mat');
 end
-lambda = 20;
-options = optimset('MaxIter', 200);
+
 
 %% =================== Part 3: Training NN ===================
 %  You have now implemented all the code necessary to train a neural 
@@ -95,8 +103,8 @@ for iter_mini_batch = iter_start:iter_end
 costFunction = @(p) nnCostFunction(p, ...
                                    input_layer_size, ...
                                    hidden_layer_size, ...
-                                   num_labels, X(perm(mini_batch_init:mini_batch_init+9),:),...
-                                   y(perm(mini_batch_init:mini_batch_init+9)), lambda);
+                                   num_labels, X(perm(mini_batch_init:mini_batch_init+mini_batch_size-1),:),...
+                                   y(perm(mini_batch_init:mini_batch_init+mini_batch_size-1)), lambda);
 
 % Now, costFunction is a function that takes in only one argument (the
 % neural network parameters)
