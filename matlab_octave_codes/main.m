@@ -18,8 +18,8 @@ options = optimset('MaxIter', 200);
 %  You will be working with a dataset that contains handwritten digits.
 %
 % setout, continue, or wrapup
-iter_start = 1;
-iter_end = 5; %max 84
+iter_start = 6;
+iter_end = 8; %max 84
 
 if iter_start == 1
   calc_aim = 'setout';
@@ -69,7 +69,7 @@ if strcmp('setout',calc_aim)
   err_train = zeros(mini_batchs_length,1);
   err_cv = zeros(mini_batchs_length,1);
 else
-  load('errors.mat');
+  load('errs.mat');
 end
 
 %% ================ Part 2: Initializing Pameters ================
