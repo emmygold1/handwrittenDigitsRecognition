@@ -10,7 +10,7 @@ hidden_layer_size = 250;   % 250 hidden units
 num_labels = 10;          % 10 labels, from 1 to 10   
                           % (note that we have mapped "0" to label 10)
                           
-lambda = 20;
+lambda = 0.01;
 options = optimset('MaxIter', 200);
 
 %% =========== Part 1: Loading and Visualizing Data =============
@@ -167,4 +167,3 @@ else
   pred = [(1:no_test)' pred];
   dlmwrite('test_pred.csv', pred, '-append');
 end
-
