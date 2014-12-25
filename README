@@ -1,6 +1,8 @@
  These are neural network machine learning programs to participate in the kaggle competition of hand-written digits recognition.
 
-All programs are NOT original, as is tranlation into R form from Matlab/Octave form of Coursera machine learning course material by Andrew Ng, Stanford University.
+All programs are NOT original, it is a modification and combination of Coursera machine learning course material by Andrew Ng, Stanford University.
+
+Use mini-batch gradient regression and training error and cross validation error as diagnostic measure.
 
 In case of application of these programs, give all credit to Andrew!
 
@@ -10,6 +12,4 @@ Programs are still under debugging and optimisation!
 
 Training dataset and test dataset can be download from kaggle.com.
 
-Looks like fmincg is faster and better than the minimization algorithms in R. For this reason I will use Andrew's matlab/octave codes.
-
-The comparation of the two methods can be found in compare folder.
+Intended to use same program but in R. Found fmincg is faster. The comparation can be found in compare folder in master branch.
