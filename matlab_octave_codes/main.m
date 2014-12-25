@@ -2,8 +2,8 @@
 %% use mini-batch
 
 
-%% Initialization
-clear ; close all; clc
+%  %% Initialization
+clear ; close all; clc;
 %% Setup the parameters you will use for this exercise
 input_layer_size  = 784;  % 28x28 Input Images of Digits
 hidden_layer_size = 250;   % 250 hidden units
@@ -23,7 +23,7 @@ iter_end = 5; %max 84
 
 if iter_start == 1
   calc_aim = 'setout';
-else if iter_end == 84
+elseif iter_end == 84
   calc_aim = 'wrapup';
 else
   calc_aim = 'continue';
