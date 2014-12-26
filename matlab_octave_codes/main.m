@@ -18,12 +18,12 @@ options = optimset('MaxIter', 200);
 %  You will be working with a dataset that contains handwritten digits.
 %
 % setout, continue, or wrapup
-iter_start = 11;
-iter_end = 84; %max 84
+iter_start = 19;
+iter_end = 21; %max 21
 
 if iter_start == 1
   calc_aim = 'setout';
-elseif iter_end == 84
+elseif iter_end == 21 % max 21
   calc_aim = 'wrapup';
 else
   calc_aim = 'continue';
@@ -61,7 +61,7 @@ clear dat; %remove dat variable to save more memory
 %  pause;
 
 % form mini-batch
-mini_batch_size = 500;
+mini_batch_size = 2000;
 mini_batch_inits = 1:mini_batch_size:no_train;
 mini_batchs_length = length(mini_batch_inits);
 
