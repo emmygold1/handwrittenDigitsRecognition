@@ -18,12 +18,12 @@ options = optimset('MaxIter', 200);
 %  You will be working with a dataset that contains handwritten digits.
 %
 % setout, continue, or wrapup
-iter_start = 19;
-iter_end = 21; %max 21
+iter_start = 3;
+iter_end = 7; %max 7
 
 if iter_start == 1
   calc_aim = 'setout';
-elseif iter_end == 21 % max 21
+elseif iter_end == 7 % max 7
   calc_aim = 'wrapup';
 else
   calc_aim = 'continue';
@@ -61,7 +61,7 @@ clear dat; %remove dat variable to save more memory
 %  pause;
 
 % form mini-batch
-mini_batch_size = 2000;
+mini_batch_size = 6000;
 mini_batch_inits = 1:mini_batch_size:no_train;
 mini_batchs_length = length(mini_batch_inits);
 
@@ -79,15 +79,19 @@ end
 %  (randInitializeWeights.m)
 
 fprintf('\nInitializing Neural Network Parameters ...\n')
-if strcmp('setout', calc_aim)
-  initial_Theta1 = randInitializeWeights(input_layer_size, hidden_layer_size);
-  initial_Theta2 = randInitializeWeights(hidden_layer_size, num_labels);
+load('initial_nn_params.mat');
+% load the parameters trained before
 
-% Unroll parameters
-  initial_nn_params = [initial_Theta1(:) ; initial_Theta2(:)];
-else
-  load('initial_nn_params.mat');
-end
+
+%  if strcmp('setout', calc_aim)
+%    initial_Theta1 = randInitializeWeights(input_layer_size, hidden_layer_size);
+%    initial_Theta2 = randInitializeWeights(hidden_layer_size, num_labels);
+%  
+%  % Unroll parameters
+%    initial_nn_params = [initial_Theta1(:) ; initial_Theta2(:)];
+%  else
+%    load('initial_nn_params.mat');
+%  end
 
 
 %% =================== Part 3: Training NN ===================
