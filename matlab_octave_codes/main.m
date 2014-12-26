@@ -11,23 +11,23 @@ num_labels = 10;          % 10 labels, from 1 to 10
                           % (note that we have mapped "0" to label 10)
                           
 lambda = 0.01;
-options = optimset('MaxIter', 200);
+options = optimset('MaxIter', 400);
 
 %% =========== Part 1: Loading and Visualizing Data =============
 %  We start by first loading and visualizing the dataset. 
 %  You will be working with a dataset that contains handwritten digits.
 %
 % setout, continue, or wrapup
-iter_start = 3;
-iter_end = 7; %max 7
-
-if iter_start == 1
-  calc_aim = 'setout';
-elseif iter_end == 7 % max 7
-  calc_aim = 'wrapup';
-else
-  calc_aim = 'continue';
-end
+iter_start = 1;
+iter_end = 1; %max 1
+calc_aim = 'wrapup';
+%  if iter_start == 1
+%    calc_aim = 'setout';
+%  elseif iter_end == 7 % max 7
+%    calc_aim = 'wrapup';
+%  else
+%    calc_aim = 'continue';
+%  end
 
 % Load Training Data
 fprintf('Loading Data ...\n')
@@ -61,16 +61,18 @@ clear dat; %remove dat variable to save more memory
 %  pause;
 
 % form mini-batch
-mini_batch_size = 6000;
+mini_batch_size = 42000;
 mini_batch_inits = 1:mini_batch_size:no_train;
 mini_batchs_length = length(mini_batch_inits);
 
-if strcmp('setout',calc_aim)
-  err_train = zeros(mini_batchs_length,1);
+err_train = zeros(mini_batchs_length,1);
   err_cv = zeros(mini_batchs_length,1);
-else
-  load('errs.mat');
-end
+%  if strcmp('setout',calc_aim)
+%    err_train = zeros(mini_batchs_length,1);
+%    err_cv = zeros(mini_batchs_length,1);
+%  else
+%    load('errs.mat');
+%  end
 
 %% ================ Part 2: Initializing Pameters ================
 %  In this part of the exercise, you will be starting to implment a two
